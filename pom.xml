@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.kontalk</groupId>
+  <artifactId>tigase-kontalk</artifactId>
+  <version>devel</version>
+  <packaging>pom</packaging>
+
+  <modules>
+      <module>../tigase-server/modules/master</module>
+      <module>../tigase-extension</module>
+  </modules>
+
+  <build>
+      <plugins>
+        <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+            <execution>
+                <phase>install</phase>
+                <goals>
+                    <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                    <outputDirectory>${project.basedir}/jars</outputDirectory>
+                </configuration>
+            </execution>
+        </executions>
+        </plugin>
+        <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>2.4.3</version>
+            <executions>
+                <execution>
+                    <id>copy-resources</id>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>jars</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>../tigase-extension/target/lib</directory>
+                                <excludes>
+                                    <exclude>junit*</exclude>
+                                </excludes>
+                            </resource>
+                            <resource>
+                                <directory>../tigase-server/target/lib</directory>
+                                <excludes>
+                                    <exclude>junit*</exclude>
+                                </excludes>
+                            </resource>
+                            <resource>
+                                <directory>../tigase-extension/target</directory>
+                                <includes>
+                                    <include>tigase-extension-*.jar</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>
+
+</project>
