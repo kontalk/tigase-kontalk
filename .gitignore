@@ -1,2 +1,5 @@
 /jars
+/logs
+/certs
+/etc/config-dump.properties
 *.pem
