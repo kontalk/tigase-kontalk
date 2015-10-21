@@ -24,4 +24,4 @@ you should get it up and running:
 scripts/tigase.sh start etc/tigase.conf
 ```
 
-You can find all the repositories in [our organization](/kontalk).
+You can find all the repositories in [our organization](//github.com/kontalk).
