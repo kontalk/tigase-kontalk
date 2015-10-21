@@ -3,3 +3,4 @@
 /certs
 /etc/config-dump.properties
 *.pem
+*.iml
