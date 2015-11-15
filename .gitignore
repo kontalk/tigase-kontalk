@@ -4,3 +4,4 @@
 /etc/config-dump.properties
 *.pem
 *.iml
+.vagrant

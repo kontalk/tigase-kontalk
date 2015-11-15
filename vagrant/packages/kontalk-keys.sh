@@ -12,7 +12,7 @@ then
 fi
 
 # create GPG key if needed
-if [ ! -f $HOME/.gpgsetup ];
+if [ ! -f ${HOME}/.gpgsetup ];
 then
     echo "Generating GPG key pair"
     gpg2 --batch --gen-key <<EOF
@@ -26,5 +26,5 @@ Name-Email: kontalk@$(hostname -f)
 Expire-Date: 0
 EOF
 
-    touch $HOME/.gpgsetup
+    touch ${HOME}/.gpgsetup
 fi

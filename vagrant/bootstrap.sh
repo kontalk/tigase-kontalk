@@ -7,7 +7,8 @@
 # install rng for increased entropy
 if [ ! -f /etc/default/rng-tools ];
 then
-    apt-get install -qq -y rng-tools &&
+    apt-get install -qq -y rng-tools
+    [ ! -f /etc/default/rng-tools ] && exit 1
     echo "HRNGDEVICE=/dev/urandom" >>/etc/default/rng-tools
     systemctl restart rng-tools
 fi
