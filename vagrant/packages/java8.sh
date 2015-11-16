@@ -10,6 +10,6 @@ else
     apt-get update -qq >/dev/null
     echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
     echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
-    apt-get install -qq --yes oracle-java8-installer
+    apt-get install -qq --yes oracle-java8-installer >/dev/null
     yes "" | apt-get -f install
 fi
