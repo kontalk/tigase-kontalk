@@ -31,7 +31,7 @@ message-router/components/msg-receivers/bosh.active[B]=false
 --hardened-mode=true
 --comp-name-1=upload
 --comp-class-1=org.kontalk.xmppserver.KontalkLegacyFileUploadComponent
-upload/uri=https://10.0.2.2:5980/upload
+upload/uri=https://@HOSTNAME@:5980/upload
 --comp-name-2=network
 --comp-class-2=org.kontalk.xmppserver.NetworkComponent
 network/db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
