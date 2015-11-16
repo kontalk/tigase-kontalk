@@ -5,7 +5,7 @@ SSL_CERT="${HOME}/tigase-kontalk/certs/$(hostname -f).pem"
 if [ ! -f ${SSL_CERT} ];
 then
     echo "Generating SSL certificate"
-    openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=$(hostname -f)" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes &&
+    openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=$(hostname -f)" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes >/dev/null &&
     mkdir -p $(dirname ${SSL_CERT})
     cat cert.pem key.pem >${SSL_CERT} &&
     rm cert.pem key.pem
@@ -15,7 +15,7 @@ fi
 if [ ! -f ${HOME}/.gpgsetup ];
 then
     echo "Generating GPG key pair"
-    gpg2 --batch --gen-key <<EOF
+    gpg2 --batch --gen-key >/dev/null <<EOF
 %no-protection
 Key-Type: 1
 Key-Length: 2048
