@@ -45,5 +45,6 @@ then
     git clone "https://github.com/kontalk/tigase-kontalk" &&
     cd tigase-kontalk &&
     mvn -q install || exit 1
+    ln -sf /usr/lib/libjkyotocabinet.so jars/libjkyotocabinet.so
     cd ..
 fi
