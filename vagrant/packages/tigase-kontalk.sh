@@ -6,7 +6,7 @@ BRANCH="production"
 echo "Installing Kontalk from ${BRANCH} branch"
 
 echo "Installing system dependencies"
-sudo apt-get install -qq -y gnupg2 libgpgme11-dev libkyotocabinet16 libkyotocabinet-dev gcc g++ maven git || exit 1
+sudo apt-get install -qq -y gnupg2 libgpgme11-dev libkyotocabinet16 libkyotocabinet-dev gcc g++ maven git make || exit 1
 
 # install jkyotocabinet
 if [ ! -f .jkyotosetup ];

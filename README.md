@@ -14,7 +14,7 @@ the same directory:
 Then run from this repository:
 
 ```
-mvn install
+mvn clean install
 ```
 
 Configure it through etc/tigase.conf and etc/init.properties and after that
