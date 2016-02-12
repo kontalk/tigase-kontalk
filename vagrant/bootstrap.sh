@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 
-/vagrant/packages/sysupgrade.sh
-/vagrant/packages/java8.sh
-/vagrant/packages/mysql.sh
+source setup/functions.sh
+
+# save our primary and only host name
+export PRIMARY_HOSTNAME=$(get_default_hostname)
+echo "Using primary hostname: ${PRIMARY_HOSTNAME}"
+
+# install system stuff
+source setup/system.sh
+
+# install Java 8
+source setup/java8.sh
+
+# install MySQL
+source setup/mysql.sh
 
 # install rng for increased entropy
 if [ ! -f /etc/default/rng-tools ];
@@ -14,4 +25,13 @@ then
 fi
 
 # global environment variables
-cp /vagrant/export.sh /etc/profile.d/vagrant.sh
+cp export.sh /etc/profile.d/globalenv.sh
+
+# cleanup
+source setup/cleanup.sh
+
+# custom script
+[ -x data/custom.sh ] && source data/custom.sh
+
+# last step: setup ssh
+#source setup/ssh.sh
