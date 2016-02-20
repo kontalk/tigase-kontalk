@@ -56,4 +56,4 @@ fi
 cd ${OLDCWD}
 
 # allow XMPP port
-ufw_allow 5222
+ufw_allow xmpp-client
