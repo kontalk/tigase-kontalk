@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 5222, host: 15222
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -41,19 +41,18 @@ Vagrant.configure(2) do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
+  # install system
   config.vm.provision :shell, :inline => <<-SH
-    #export DISABLE_FIREWALL=1
-    export MYSQL_ROOT_PASSWORD=root
-    export MYSQL_USER_PASSWORD=root
-	export MYSQL_USER_NAME=kontalk
-    export SSH_PORT=60822
-    export SWAPSIZE=1GiB
-    export TIMEZONE=Europe/Rome
-    # TODO export DEFAULT_USER=kontalk
     cd /vagrant
     ./bootstrap.sh
 SH
-  #config.vm.provision :shell, path: "install.sh", privileged: false
+
+  # install Kontalk
+  config.vm.provision :shell, privileged: false, :inline => <<-SH
+    cd /vagrant
+    ./install.sh
+SH
+
   # TODO rename vagrant to DEFAULT_USER
   #config.vm.provision :shell, path: "finish.sh", privileged: false
 end

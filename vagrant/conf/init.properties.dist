@@ -12,8 +12,8 @@ sess-man/plugins-conf/kontalk\:jabber\:iq\:register/expire[I]=900
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/provider=org.kontalk.xmppserver.registration.AndroidEmulatorProvider
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/sender=12345
 sess-man/plugins-conf/kontalk\:jabber\:iq\:register/device=emulator-5554
+c2s/clientCertCA=trusted.pem
 c2s/processors[s]=urn:xmpp:sm:3=org.kontalk.xmppserver.KontalkIOProcessor
-c2s/5222/port_type=plain
 --c2s-ports=5222
 --s2s-ports=5269
 message-router/components/msg-receivers/amp.active[B]=false

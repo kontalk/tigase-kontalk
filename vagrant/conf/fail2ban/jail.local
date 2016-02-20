@@ -1,0 +1,13 @@
+# Fail2Ban configuration file for Kontalk
+
+# JAILS
+
+[ssh]
+maxretry = 7
+bantime = 3600
+
+[ssh-ddos]
+enabled  = true
+
+[sasl]
+enabled  = true

@@ -4,20 +4,25 @@
 if [ ! -f ${HOME}/.databasesetup ];
 then
     echo "Creating database"
-    echo "CREATE USER 'kontalk'@'localhost' IDENTIFIED BY 'kontalk'" | mysql -uroot -proot
-    echo "CREATE DATABASE kontalk /*!40100 DEFAULT CHARACTER SET utf8mb4 */" | mysql -uroot -proot
-    echo "GRANT ALL ON kontalk.* TO 'kontalk'@'localhost'" | mysql -uroot -proot
-    echo "FLUSH PRIVILEGES" | mysql -uroot -proot
+    sql_as_root <<EOF
+CREATE USER '${MYSQL_USER_NAME}'@'localhost' IDENTIFIED BY '${MYSQL_USER_PASSWORD}';
+CREATE DATABASE ${MYSQL_USER_NAME} /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+GRANT ALL ON ${MYSQL_USER_NAME}.* TO '${MYSQL_USER_NAME}'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON mysql.proc TO ${MYSQL_USER_NAME}@'localhost';
+FLUSH PRIVILEGES;
+EOF
 
     # create tigase database objects
-    cd tigase-server &&
-    scripts/db-create-mysql.sh -y kontalk kontalk kontalk >/dev/null || exit 1
-    cd ..
+    cd ${HOME}/tigase-server &&
+    rm -f jars/*.jar &&
+    cp ../tigase-kontalk/jars/*.jar jars/ &&
+    hide_output scripts/db-create-mysql.sh -y ${MYSQL_USER_NAME} ${MYSQL_USER_PASSWORD} ${MYSQL_USER_NAME}
+    cd - >/dev/null
 
     # create kontalk database objects
-    for SCRIPT in tigase-extension/data/*.sql;
+    for SCRIPT in ${HOME}/tigase-extension/data/*.sql;
     do
-        mysql -ukontalk -pkontalk kontalk < ${SCRIPT}
+        sql_as_user < ${SCRIPT}
     done
 
     touch ${HOME}/.databasesetup

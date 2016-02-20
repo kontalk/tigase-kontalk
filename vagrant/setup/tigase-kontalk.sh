@@ -6,7 +6,11 @@ BRANCH="production"
 echo "Installing Kontalk from ${BRANCH} branch"
 
 echo "Installing system dependencies"
-sudo apt-get install -qq -y gnupg2 libgpgme11-dev libkyotocabinet16 libkyotocabinet-dev gcc g++ maven git make || exit 1
+apt_install gnupg2 libgpgme11-dev libkyotocabinet16 libkyotocabinet-dev gcc g++ maven git make
+
+# switch to home directory
+OLDCWD=$PWD
+cd
 
 # install jkyotocabinet
 if [ ! -f .jkyotosetup ];
@@ -14,12 +18,12 @@ then
     wget -q http://fallabs.com/kyotocabinet/javapkg/kyotocabinet-java-1.24.tar.gz >/dev/null &&
     tar -xzf kyotocabinet-java-1.24.tar.gz &&
     cd kyotocabinet-java-1.24 &&
-    ./configure --prefix=/usr >/dev/null &&
-    make >/dev/null &&
-    sudo make install >/dev/null || exit 1
+    hide_output ./configure --prefix=/usr
+    hide_output make
+    hide_output sudo make install
     cd .. &&
     rm -fR kyotocabinet-java-1.24 kyotocabinet-java-1.24.tar.gz &&
-    
+
     touch .jkyotosetup
 fi
 
@@ -29,7 +33,7 @@ then
     echo "Installing gnupg-for-java"
     git clone -b "${BRANCH}" "https://github.com/kontalk/gnupg-for-java.git" &&
     cd gnupg-for-java &&
-    mvn -q install || exit 1
+    hide_output mvn install
     cd .. &&
     rm -fR gnupg-for-java &&
 
@@ -44,7 +48,12 @@ then
     git clone -b "${BRANCH}" "https://github.com/kontalk/tigase-extension" &&
     git clone "https://github.com/kontalk/tigase-kontalk" &&
     cd tigase-kontalk &&
-    mvn -q install || exit 1
+    hide_output mvn install
     ln -sf /usr/lib/libjkyotocabinet.so jars/libjkyotocabinet.so
     cd ..
 fi
+
+cd ${OLDCWD}
+
+# allow XMPP port
+ufw_allow 5222

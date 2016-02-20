@@ -111,7 +111,7 @@ dd if=/dev/random of=/dev/urandom bs=1 count=32 2> /dev/null
 #
 # Allow apt to install system updates automatically every day.
 
-cat > /etc/apt/apt.conf.d/02periodic <<EOF;
+cat > /etc/apt/apt.conf.d/02periodic <<EOF
 APT::Periodic::MaxAge "7";
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
@@ -140,7 +140,7 @@ if [ -z "${DISABLE_FIREWALL}" ]; then
     if [ "$_SSH_PORT" != "22" ]; then
 
     echo "Opening alternate SSH port ${_SSH_PORT}"
-    ufw_allow $_SSH_PORT
+    ufw_allow ${_SSH_PORT}
 
     fi
     fi
@@ -198,6 +198,5 @@ restart_service resolvconf
 
 # Configure the Fail2Ban installation to prevent dumb bruce-force attacks against dovecot, postfix and ssh
 cp conf/fail2ban/jail.local /etc/fail2ban/jail.local
-cp conf/fail2ban/dovecotimap.conf /etc/fail2ban/filter.d/dovecotimap.conf
 
 restart_service fail2ban

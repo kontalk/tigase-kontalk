@@ -2,6 +2,13 @@
 
 source setup/functions.sh
 
+if [ ! -f local.properties ]; then
+  echo "local.properties not found!"
+  exit 1
+fi
+
+source local.properties
+
 # save our primary and only host name
 export PRIMARY_HOSTNAME=$(get_default_hostname)
 echo "Using primary hostname: ${PRIMARY_HOSTNAME}"
@@ -18,10 +25,10 @@ source setup/mysql.sh
 # install rng for increased entropy
 if [ ! -f /etc/default/rng-tools ];
 then
-    apt-get install -qq -y rng-tools
+    apt_install rng-tools
     [ ! -f /etc/default/rng-tools ] && exit 1
     echo "HRNGDEVICE=/dev/urandom" >>/etc/default/rng-tools
-    systemctl restart rng-tools
+    restart_service rng-tools
 fi
 
 # global environment variables
