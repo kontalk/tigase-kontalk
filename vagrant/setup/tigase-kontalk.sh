@@ -27,19 +27,6 @@ then
     touch .jkyotosetup
 fi
 
-# install gnupg-for-java
-if [ ! -f .gpgjsetup ];
-then
-    echo "Installing gnupg-for-java"
-    git clone -b "${BRANCH}" "https://github.com/kontalk/gnupg-for-java.git" &&
-    cd gnupg-for-java &&
-    hide_output mvn install
-    cd .. &&
-    rm -fR gnupg-for-java &&
-
-    touch .gpgjsetup
-fi
-
 # install Kontalk server
 if [ ! -d tigase-kontalk ];
 then

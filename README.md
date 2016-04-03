@@ -9,7 +9,6 @@ the same directory:
 
 * tigase-server
 * tigase-extension
-* gnupg-for-java
 
 Then run from this repository:
 

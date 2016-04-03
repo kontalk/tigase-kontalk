@@ -25,14 +25,7 @@ For compiling you will need also:
 
 ## Download sources ##
 
-After installing all the requiremenets, you can download the source code. We'll use the production branch, which is supposed to be stable.
-
-We will begin with gnupg-for-java.
-
-```shell
-git clone -b production https://github.com/kontalk/gnupg-for-java.git
-mvn install
-```
+After installing all the requirements, you can download the source code. We'll use the production branch, which is supposed to be stable.
 
 Next step is Kontalk server source code.
 
