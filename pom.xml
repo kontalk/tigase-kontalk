@@ -65,6 +65,21 @@
                         </resources>
                     </configuration>
                 </execution>
+                <execution>
+                    <id>copy-scripts</id>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>scripts/admin/sess-man</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>../tigase-extension/src/main/groovy/tigase/admin</directory>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
             </executions>
         </plugin>
     </plugins>

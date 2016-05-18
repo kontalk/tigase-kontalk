@@ -5,3 +5,5 @@
 *.pem
 *.iml
 .vagrant
+*.kch
+/scripts/admin
