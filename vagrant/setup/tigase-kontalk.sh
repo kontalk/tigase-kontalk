@@ -6,7 +6,7 @@ BRANCH="production"
 echo "Installing Kontalk from ${BRANCH} branch"
 
 echo "Installing system dependencies"
-apt_install gnupg2 libgpgme11-dev libkyotocabinet16 libkyotocabinet-dev gcc g++ maven git make groovy
+apt_install gnupg2 libgpgme11-dev libkyotocabinet16 libkyotocabinet-dev gcc g++ maven git make
 
 # switch to home directory
 OLDCWD=$PWD
