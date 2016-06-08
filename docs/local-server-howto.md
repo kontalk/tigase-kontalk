@@ -97,7 +97,7 @@ A default configuration file can be found in `etc/init.properties`. For general 
 Registration is already enabled in default configuration, using the `adb` tool to send SMS messages to an Android emulator. If you want real SMS verification, you need to choose a provider. It can be configured in `sess-man/plugins-conf/kontalk\:jabber\:iq\:register/provider`. Available providers are:
 
 * `NexmoSMSProvider` - uses [Nexmo](https://nexmo.com/) to manually send SMS messages and use the local database for storing verification PINs
-* `NexmoVerifyProvider.java` uses [Nexmo](https://nexmo.com/) verification API which can handle the whole verification workflow
+* `NexmoVerifyProvider` uses [Nexmo](https://nexmo.com/) verification API which can handle the whole verification workflow
 * `AndroidEmulatorProvider` - uses adb to send SMS messages to an Android emulator
 
 For providers backed by Nexmo, you need to configure two other additional parameters, namely `username` and `password` with Nexmo API key and API secret respectively.
