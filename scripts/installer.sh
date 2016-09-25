@@ -2,7 +2,7 @@
 # Helper installation scripts for rapid download and building of the Kontalk server
 # it will install everything in the directory provided as a parameter (default: $PWD/kontalk-server)
 # To be used as a standalone script like this:
-# wget -O - url_to_installer.sh | bash
+# wget -qq -O - url_to_installer.sh | bash
 
 yell() { echo "$0: $*" >&2; }
 die() { yell "$*"; exit 1; }

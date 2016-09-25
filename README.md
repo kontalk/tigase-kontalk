@@ -7,7 +7,7 @@ a Kontalk server.
 To build the Kontalk server, run this command in your terminal:
 
 ```
-wget -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash
+wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash
 ```
 
 The script will clone the following repositories into the current directory, in a new folder called "kontalk":
