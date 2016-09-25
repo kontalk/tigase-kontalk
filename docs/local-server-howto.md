@@ -83,14 +83,8 @@ The name of the file must match the host name you will use as the XMPP host for 
 
 ## Configuration ##
 
-A default configuration file can be found in `etc/init.properties`. For general Tigase configuration, you can refer to its documentation. For Kontalk specific usage, here is a list of parameters you will need to modify:
-
-* `sess-man/plugins-conf/fingerprint` - fingerprint of your newly created GPG key
-* `sess-man/plugins-conf/network-domain` - your network name (WARNING: this is not the host name!)
-* `sess-man/plugins-conf/kontalk\:jabber\:iq\:register/provider` - registration provider (see section *Registration*)
-* `c2s/clientCertCA` - path to the PEM trusted certificate chain for client authentication (dummy: won't be used, but it needs to be a valid list of concatenated CA certificates, any system pem file will do)
-* Various `db-uri` parameters all pointing to the same database
-* `upload/uri` - URL to your Fileserver component (see section *File upload support*)
+A default configuration file can be found in `etc/init.properties`. For general Tigase configuration, you can refer to its documentation.
+All Kontalk specific parameters have comments explaining how to set them.
 
 ## Registration ##
 
@@ -131,43 +125,11 @@ First of all, enable push support in the server by adding:
 
 to `--sm-plugins`.
 
-Then add these other parameters at the end:
-
-```
---comp-name-4=push
---comp-class-4=org.kontalk.xmppserver.KontalkLegacyPushComponent
-push/gcm-projectid=GCM-PROJECTID
-push/gcm-apikey=GCM-API-KEY
-push/db-uri=DB-URI
-```
-
-`push/db-uri` should be the same value as other parameters with the same name.
+Then uncomment the `KontalkLegacyPushComponent` component part and configure it with your GCM parameters.
 
 ## File upload support ##
 
-The file upload component (already activated in the configuration template using `KontalkLegacyFileUploadComponent`) will be using the Fileserver component.
-
-Clone the Fileserver repository:
-
-```
-git clone https://github.com/kontalk/fileserver.git
-```
-
-The fileserver component is a very basic file uploader designed to work with a Kontalk server. Its configuration file fileserver.conf is a JSON file with C++ block comments allowed.
-
-Edit fileserver.conf and set the `host` and `network` parameters with the same value of the domain name you chose as the virtual host for Tigase (`--virt-hosts` in Tigase configuration). Edit also the `fingerprint` parameters with the fingerprint of the PGP server key used for Tigase.
-
-The `storage` section holds the configuration for the actual storage driver. The only available implementation is `DiskFileStorage`, accepting the path where to store uploaded files as the only parameter.
-
-The `upload` section can be used to configure accepted MIME types (`accept_content`), max file size (`max_size`, in bytes), and the URL returned to the client after the upload. This must match an address visible to the client (`upload/uri` in Tigase configuration), because that URL will be used by clients to download the uploaded file later (that is, by the message recipient).
-
-With your shell inside the fileserver directory, run this command to start it:
-
-```shell
-GNUPGHOME=gnupg_home_dir twistd --pidfile fileserver.pid --logfile fileserver.log kontalk-fileserver
-```
-
-The GNUPGHOME assignment is required only if you choose a non-standard path for your GPG home.
+> TODO configure HttpFileUploadComponent
 
 ## Running ##
 
