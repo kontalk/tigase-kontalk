@@ -48,6 +48,7 @@
                                 <directory>../tigase-extension/target/lib</directory>
                                 <excludes>
                                     <exclude>junit*</exclude>
+                                    <exclude>slf4j*</exclude>
                                 </excludes>
                             </resource>
                             <resource>
@@ -89,8 +90,13 @@
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.36</version>
+        <version>5.1.39</version>
     </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+          <version>1.7.5</version>
+      </dependency>
   </dependencies>
 
 </project>
