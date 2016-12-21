@@ -52,8 +52,58 @@ delivered to fully support the Kontalk workflow.
 
 ### PGP-key based authentication
 This is the central authentication module that allows authentication through
-means of a PGP key previously signed by the server during registration. It's
-built on top of [XEP-0077: In-band registration](http://xmpp.org/extensions/xep-0077.html)
-with a few more form fields to include some stuff such as verification code,
-phone number and public key. More details on the XMPP extension can be found in
-the [relevant spec document](https://github.com/kontalk/specs/blob/master/register.md).
+means of a PGP key previously signed by the server during registration.
+Despite an OpenPGP-based TLS RFC exists, the only known implementation to
+mankind is GnuTLS. And being everything in Java not based on GnuTLS, we had to
+make something up to make this work. So clients build a X.509 certificate that
+encapsulates the PGP key. During registration, servers sign that embedded PGP
+key and return it to the client. The signed key is then embedded again in the
+wrapper certificate to log in. To certify that the certificate was indeed
+created by the same entity that owns the embedded PGP key, the private key
+of the PGP key is the same private key of the wrapper certificate.
+
+We generated a random UUID/OID for the X.509 extension used to encapsulate the
+PGP key:
+
+```
+UUID: 24e844a0-6cbc-11e3-8997-0002a5d5c51b
+OID: 2.25.49058212633447845622587297037800555803
+```
+
+### Registration
+Because of how Kontalk was designed, we needed some extensions to support
+phone number-based registration. Our extension is built on top of
+[XEP-0077: In-band registration](http://xmpp.org/extensions/xep-0077.html) with
+a few more form fields to include some stuff such as verification code, phone
+number and public key. More details on the XMPP extension can be found in the
+[relevant spec document](https://github.com/kontalk/specs/blob/master/register.md).
+
+We built something pretty much modular that can be extended to support more
+telephony providers. We currently support:
+
+* Nexmo (SMS and verify APIs)
+* Cognalys
+* Checkmobi (CLI and missed-call)
+* Android emulator (used in local tests)
+
+### Roster match
+We did this with a component. The component is responsible for communicating
+both with clients and with other servers in the network. It's used to find other
+registered users in the network given their phone numbers.
+More details on the XMPP extension in the [relevant spec document](https://github.com/kontalk/specs/blob/master/roster-match.md).
+
+### Public key publish
+TODO
+
+### Server list command
+TODO
+
+### Extended addressing
+TODO
+
+### Media upload
+TODO
+
+### Push notifications support
+TODO
+
