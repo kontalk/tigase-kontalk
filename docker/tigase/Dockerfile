@@ -17,7 +17,7 @@ WORKDIR /home/kontalk
 
 RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash
 
-CMD dockerize -stdout /home/kontalk/tigase-kontalk/logs/tigase-console.log \
- -stderr /home/kontalk/tigase-kontalk/logs/tigase.log.0 \
+CMD dockerize -stdout /home/kontalk/kontalk/tigase-kontalk/logs/tigase-console.log \
+ -stderr /home/kontalk/kontalk/tigase-kontalk/logs/tigase.log.0 \
  -wait tcp://db:3306 \
- /home/kontalk/tigase-kontalk/scripts/tigase.sh etc/tigase.conf run
+ /home/kontalk/kontalk/tigase-kontalk/scripts/tigase.sh etc/tigase.conf run
