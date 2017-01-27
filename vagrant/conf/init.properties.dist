@@ -1,40 +1,94 @@
-config-type=--gen-config-def
+# Default Kontalk configuration, fine for most configurations
+
+# XMPP host where you're serving your Kontalk instance
+# Kontalk extensions support one virtual host only for now
+sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/host=@HOSTNAME@
+# Virtual hosts served by this instance (must match the above)
+--virt-hosts=@HOSTNAME@
+# Administrator JID (must be in the above domain)
+--admins=admin@@HOSTNAME@
+
+# Fingerprint of the GPG server key
+sess-man/plugins-conf/fingerprint=@FINGERPRINT@
+
+# The global network domain (do not change this if you want to participate in the Kontalk global network)
+sess-man/plugins-conf/network-domain=kontalk.net
+
+# Database configuration (the two db-uri parameters must be identical)
+--user-db=mysql
+--user-db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
+sess-man/plugins-conf/db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
+
+# Registration provider configuration
+# Dummy provider configuration
+# It will always accept 123456 as a valid verification code
+# Good for a remote test server
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/providers[s]=dummy=org.kontalk.xmppserver.registration.DummyProvider
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/dummy-sender=123456
+
+# Endpoints configuration
+# All endpoints must declare a clientCertCA pointing to a valid certificate chain file
+# (any CA chain will do, it won't actually be used but Tigase won't work without it)
+
+# Client endpoint configuration
+--c2s-ports=5222
+c2s/clientCertCA=trusted.pem
+
+# Websocket endpoint configuration
+message-router/components/msg-receivers/ws2s.active[B]=false
+ws2s/connections/5290/socket=ssl
+ws2s/clientCertCA=trusted.pem
+
+# BOSH endpoint configuration
+message-router/components/msg-receivers/bosh.active[B]=false
+bosh/connections/5280/socket=ssl
+bosh/clientCertCA=trusted.pem
+
+# S2S endpoint configuration (comment to disable XMPP federation)
+--s2s-ports=5269
+
+# Enabled plugins, comma-separated
+# prefixed with a minus (-) means not loaded, prefixed with nothing or with a plus (+) means loaded.
+--sm-plugins=-amp,-message-carbons,-jabber:iq:auth,-jabber:iq:register,-jabber:iq:privacy,-jabber:iq:last,-msgoffline,-urn:xmpp:blocking,-urn:xmpp:csi:0,+message,+msgoffline2,+presence:urn:xmpp:pubkey:2,+kontalk:jabber:iq:register,+kontalk:jabber:iq:roster,+urn:xmpp:pubkey:2,+kontalk:urn:xmpp:blocking,+kontalk:urn:xmpp:csi:0,+kontalk:jabber:iq:last
+
+# Comment these to revert to default logging
+--debug=server,xmpp.impl
+--debug-packages=org.kontalk
+
+# External components. Do not change the default names!
+# --comp-xxx parameter pairs follow a numbering order
+# whenever you delete/comment or insert a component, remember to fix the numbering!!
+
+# Network component
+# enables server list commands. Particularly needed if participating in a global network
+--comp-name-1=network
+--comp-class-1=org.kontalk.xmppserver.NetworkComponent
+
+# Phone number lookup component
+# enables discovery of contacts in the local/global network by their phone numbers
+--comp-name-2=probe
+--comp-class-2=org.kontalk.xmppserver.probe.ProbeComponent
+
+--comp-name-3=multicast
+--comp-class-3=org.kontalk.xmppserver.ExtendedAddressing
+
+# External XMPP component protocol
+# needed for HttpFileUploadComponent
+#--comp-name-4=ext
+#--comp-class-4=tigase.server.ext.ComponentProtocol
+# these must match HttpFileUploadComponent configuration
+#--external=media.prime.kontalk.net:secret:listen:5270
+
+# Internal parameters
+# the following properties must not be changed unless you really know what you're doing
 basic-conf/auth-repo-params/sasl-mechs=EXTERNAL
 sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/factory=org.kontalk.xmppserver.auth.KontalkSaslServerFactory
 sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/mechanism-selector=org.kontalk.xmppserver.auth.KontalkMechanismSelector
-sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/host=@HOSTNAME@
 sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/callbackhandler-EXTERNAL=org.kontalk.xmppserver.auth.KontalkCertificateCallbackHandler
-sess-man/plugins-conf/fingerprint=@FINGERPRINT@
-sess-man/plugins-conf/network-domain=kontalk.net
-sess-man/plugins-conf/db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
-sess-man/plugins-conf/presence/extended-presence-processors=org.kontalk.xmppserver.presence.PublicKeyPresence
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/expire[I]=900
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/provider=org.kontalk.xmppserver.registration.AndroidEmulatorProvider
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/sender=12345
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/device=emulator-5554
-c2s/clientCertCA=trusted.pem
+sess-man/plugins-conf/presence-state/extended-presence-processors=org.kontalk.xmppserver.presence.PublicKeyPresence
 c2s/processors[s]=urn:xmpp:sm:3=org.kontalk.xmppserver.KontalkIOProcessor
---c2s-ports=5222
---s2s-ports=5269
 message-router/components/msg-receivers/amp.active[B]=false
-message-router/components/msg-receivers/ws2s.active[B]=false
-message-router/components/msg-receivers/bosh.active[B]=false
---sm-plugins=-amp,-message-carbons,-jabber:iq:auth,-jabber:iq:register,-jabber:iq:privacy,-jabber:iq:last,-msgoffline,+message,+msgoffline2,+presence:urn:xmpp:pubkey:2,+kontalk:jabber:iq:register,+kontalk:jabber:iq:roster,+urn:xmpp:pubkey:2,+urn:xmpp:blocking,+urn:xmpp:csi:0,+kontalk:jabber:iq:last
---admins=admin@@HOSTNAME@
---virt-hosts=@HOSTNAME@
---debug=server,xmpp.impl
---debug-packages=org.kontalk
---user-db=mysql
---user-db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
 --vhost-anonymous-enabled=false
 --vhost-tls-required=false
 --hardened-mode=true
---comp-name-1=upload
---comp-class-1=org.kontalk.xmppserver.KontalkLegacyFileUploadComponent
-upload/uri=https://@HOSTNAME@:5980/upload
---comp-name-2=network
---comp-class-2=org.kontalk.xmppserver.NetworkComponent
-network/db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
---comp-name-3=probe
---comp-class-3=org.kontalk.xmppserver.probe.ProbeComponent
-probe/db-uri=jdbc:mysql://localhost:3306/@DBNAME@?user=@DBUSER@&password=@DBPASS@&useUnicode=true&characterEncoding=UTF-8
+config-type=--gen-config-def
