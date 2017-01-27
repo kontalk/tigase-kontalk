@@ -93,6 +93,9 @@ Registration is already enabled in default configuration, using the `adb` tool t
 * `NexmoSMSProvider` - uses [Nexmo](https://nexmo.com/) to manually send SMS messages and use the local database for storing verification PINs
 * `NexmoVerifyProvider` uses [Nexmo](https://nexmo.com/) verification API which can handle the whole verification workflow
 * `AndroidEmulatorProvider` - uses adb to send SMS messages to an Android emulator
+* `DummyProvider` - always accepts a verification code equal to the sender number configured
+
+Those names must be prefixed in configuration with the full package name `org.kontalk.xmppserver.registration.`.
 
 For providers backed by Nexmo, you need to configure two other additional parameters, namely `username` and `password` with Nexmo API key and API secret respectively.
 For Nexmo verification API provider, one more parameter called `brand` should have value "Kontalk" (it will appear in the verification SMS text):
@@ -100,12 +103,46 @@ For Nexmo verification API provider, one more parameter called `brand` should ha
 This is an example configuration using the Nexmo verification API:
 
 ```
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/provider=org.kontalk.xmppserver.registration.NexmoVerifyProvider
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/sender=SENDERID
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/username=APIKEY
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/password=APISECRET
-sess-man/plugins-conf/kontalk\:jabber\:iq\:register/brand=YOURBRAND
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/providers[s]=nexmo=org.kontalk.xmppserver.registration.NexmoVerifyProvider
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/nexmo-sender=SENDERID
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/nexmo-username=APIKEY
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/nexmo-password=APISECRET
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/nexmo-brand=YOURBRAND
 ```
+
+The `providers[s]` property lists which providers should be loaded. It should be in this form:
+
+```
+provider_name=provider_class,provider_name=provider_class,...
+```
+
+The provider name can be anything, as long as it's the same among all its parameters, defined right after:
+
+```
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/provider_name-param_name=param_value
+```
+
+When configuring multiple providers, you can set a default provider and a fallback
+one to be used when the default one fails for whatever reason:
+
+```
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/default-provider=nexmo
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/fallback-provider=dummy
+```
+
+If no default or fallback providers are configured, choice will be driven by the order
+you configured them in the `providers[s]` property.
+
+
+For remote test servers, the dummy provider is a good way to test registrations:
+
+```
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/providers[s]=dummy=org.kontalk.xmppserver.registration.DummyProvider
+sess-man/plugins-conf/kontalk\:jabber\:iq\:register/dummy-sender=123456
+```
+
+This will configure your server to always accept 123456 as a valid verification code for any account registered.
+
 
 To disable registration (which makes your server pretty much useless), remove:
 
@@ -113,7 +150,7 @@ To disable registration (which makes your server pretty much useless), remove:
 +kontalk:jabber:iq:register
 ```
 
-from the `--sm-plugins` directive.
+from the `--sm-plugins` directive and remove all lines beginning with `sess-man/plugins-conf/kontalk\:jabber\:iq\:register`.
 
 ## Push notifications ##
 
