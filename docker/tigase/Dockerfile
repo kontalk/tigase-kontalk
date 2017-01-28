@@ -17,7 +17,10 @@ WORKDIR /home/kontalk
 
 RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash
 
-CMD dockerize -stdout /home/kontalk/kontalk/tigase-kontalk/logs/tigase-console.log \
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENTRYPOINT dockerize \
+ -template /tmp/init.properties.dist:/home/kontalk/kontalk/tigase-kontalk/etc/init.properties \
+ -stdout /home/kontalk/kontalk/tigase-kontalk/logs/tigase-console.log \
  -stderr /home/kontalk/kontalk/tigase-kontalk/logs/tigase.log.0 \
  -wait tcp://db:3306 \
- /home/kontalk/kontalk/tigase-kontalk/scripts/tigase.sh etc/tigase.conf run
+ /home/kontalk/kontalk/tigase-kontalk/scripts/tigase.sh run /home/kontalk/kontalk/tigase-kontalk/etc/tigase.conf

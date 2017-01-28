@@ -18,8 +18,13 @@ services:
      image: kontalk/xmppserver
      ports:
        - "8222:5222"
+     volumes:
+       - ./init.properties.dist:/tmp/init.properties.dist
      restart: always
      env_file: tigase.properties
+     environment:
+       MYSQL_DATABASE: kontalk
+       MYSQL_USER: kontalk
 
 volumes:
     db_data:
