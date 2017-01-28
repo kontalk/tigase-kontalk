@@ -20,11 +20,14 @@ services:
        - "8222:5222"
      volumes:
        - ./init.properties.dist:/tmp/init.properties.dist
+       - ./entrypoint.sh:/home/kontalk/entrypoint.sh
      restart: always
      env_file: tigase.properties
      environment:
        MYSQL_DATABASE: kontalk
        MYSQL_USER: kontalk
+     user: kontalk
+     entrypoint: ./entrypoint.sh
 
 volumes:
     db_data:

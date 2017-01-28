@@ -4,7 +4,8 @@ LABEL version="1.0"
 LABEL description="Kontalk server base image"
 
 RUN apt-get -qq update
-RUN apt-get -qq -y install wget git maven openjdk-8-jdk
+RUN apt-get -qq -y install wget git maven openjdk-8-jdk mysql-client
+RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 ENV DOCKERIZE_VERSION v0.3.0
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
