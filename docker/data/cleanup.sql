@@ -1,4 +1,4 @@
-DROP TABLE messages;
-DROP TABLE servers;
-DROP TABLE push;
-DROP TABLE validations;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS servers;
+DROP TABLE IF EXISTS push;
+DROP TABLE IF EXISTS validations;

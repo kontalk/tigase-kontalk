@@ -14,7 +14,7 @@ then
     cd - >/dev/null
 
     # create kontalk database objects
-    for SCRIPT in ${HOME}/kontalk/tigase-kontalk/docker/cleanup.sql ${HOME}/kontalk/tigase-extension/data/*.sql;
+    for SCRIPT in ${HOME}/kontalk/tigase-kontalk/docker/data/cleanup.sql ${HOME}/kontalk/tigase-extension/data/*.sql;
     do
         mysql -h db --port 3306 -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} < ${SCRIPT}
     done
