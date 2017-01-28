@@ -10,7 +10,7 @@ then
     cd ${HOME}/kontalk/tigase-server &&
     rm -f jars/*.jar &&
     cp ../tigase-kontalk/jars/*.jar jars/ &&
-    scripts/db-create-mysql.sh -y ${MYSQL_USER} ${MYSQL_PASSWORD} ${MYSQL_DATABASE}
+    scripts/db-create-mysql.sh -y ${MYSQL_USER} ${MYSQL_PASSWORD} ${MYSQL_DATABASE} root ${MYSQL_ROOT_PASSWORD} db
     cd - >/dev/null
 
     # create kontalk database objects

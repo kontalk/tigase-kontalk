@@ -19,7 +19,7 @@ services:
      ports:
        - "8222:5222"
      volumes:
-       - ./init.properties.dist:/tmp/init.properties.dist
+       - ./data/init.properties.dist:/tmp/init.properties.dist
        - ./entrypoint.sh:/home/kontalk/entrypoint.sh
      restart: always
      env_file: tigase.properties
