@@ -2,11 +2,11 @@
 
 # XMPP host where you're serving your Kontalk instance
 # Kontalk extensions support one virtual host only for now
-sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/host={{ .Env.HOSTNAME }}
+sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/host={{ .Env.XMPP_SERVICE }}
 # Virtual hosts served by this instance (must match the above)
---virt-hosts={{ .Env.HOSTNAME }}
+--virt-hosts={{ .Env.XMPP_SERVICE }}
 # Administrator JID (must be in the above domain)
---admins=admin@{{ .Env.HOSTNAME }}
+--admins=admin@{{ .Env.XMPP_SERVICE }}
 
 # Fingerprint of the GPG server key
 sess-man/plugins-conf/fingerprint={{ .Env.FINGERPRINT }}
