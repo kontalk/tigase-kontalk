@@ -42,7 +42,24 @@ ln -sf /usr/lib/libjkyotocabinet.so jars/libjkyotocabinet.so
 
 ## Create database ##
 
-In addition to the [Tigase database scripts](http://docs.tigase.org/tigase-server/7.1.0/Administration_Guide/html/#_prepare_database), you will need to run the following scripts in the same database:
+Database objects for Tigase itself and Kontalk must be created now. Run these commands while standing in same directory of the previous commands:
+
+```shell
+cd tigase-server
+rm -f jars/*.jar
+cp ../tigase-kontalk/jars/*.jar jars/
+java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
+    -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
+    -logLevel ALL -useSSL false
+java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
+    -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
+    -logLevel ALL -useSSL false \
+    database/mysql-pubsub-schema-3.0.0.sql
+```
+
+Replace the variables above with the proper MySQL information.
+
+Now it's time for Kontalk database objects. Run the following scripts in the same database using any MySQL client:
 
 * `tigase-extension/data/network.sql` which will create a *servers* table that you will need to fill later
 * `tigase-extension/data/messages.sql` creates the *messages* table for offline message delivery
