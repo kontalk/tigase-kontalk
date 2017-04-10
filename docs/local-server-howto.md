@@ -42,7 +42,7 @@ ln -sf /usr/lib/libjkyotocabinet.so jars/libjkyotocabinet.so
 
 ## Create database ##
 
-In addition to the [Tigase database scripts](http://docs.tigase.org/tigase-server/snapshot/Administration_Guide/html/#_prepare_database), you will need to run the following scripts in the same database:
+In addition to the [Tigase database scripts](http://docs.tigase.org/tigase-server/7.1.0/Administration_Guide/html/#_prepare_database), you will need to run the following scripts in the same database:
 
 * `tigase-extension/data/network.sql` which will create a *servers* table that you will need to fill later
 * `tigase-extension/data/messages.sql` creates the *messages* table for offline message delivery
