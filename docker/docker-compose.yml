@@ -17,7 +17,8 @@ services:
        - db
      image: kontalk/xmppserver
      ports:
-       - "8222:5222"
+       - "5222:5222"
+       - "5269:5269"
      volumes:
        - ./data/init.properties.in:/tmp/init.properties.in
        - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
