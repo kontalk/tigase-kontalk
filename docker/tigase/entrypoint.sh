@@ -51,10 +51,13 @@ then
     cp ../tigase-kontalk/jars/*.jar jars/ &&
     java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
         -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
-        -logLevel ALL -useSSL false -adminJID admin@${XMPP_SERVICE} -adminJIDpass dummy
+        -rootUser root -rootPass ${MYSQL_ROOT_PASSWORD} \
+        -adminJID admin@${XMPP_SERVICE} -adminJIDpass dummy \
+        -logLevel ALL -useSSL false -serverTimezone ${MYSQL_TIMEZONE}
     java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
         -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
-        -logLevel ALL -useSSL false \
+        -rootUser root -rootPass ${MYSQL_ROOT_PASSWORD} \
+        -logLevel ALL -useSSL false -serverTimezone ${MYSQL_TIMEZONE} \
         database/mysql-pubsub-schema-3.0.0.sql
     cd - >/dev/null
 
@@ -77,7 +80,7 @@ gpg2 --export ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-public.key
 gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-private.key
 
 dockerize \
- -template /tmp/init.properties.dist:${HOME}/kontalk/tigase-kontalk/etc/init.properties \
+ -template /tmp/init.properties.in:${HOME}/kontalk/tigase-kontalk/etc/init.properties \
  -stdout ${HOME}/kontalk/tigase-kontalk/logs/tigase-console.log \
  -stderr ${HOME}/kontalk/tigase-kontalk/logs/tigase.log.0 \
  -wait tcp://db:3306 \

@@ -87,6 +87,7 @@ sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/mechanism-selector=o
 sess-man/plugins-conf/urn\:ietf\:params\:xml\:ns\:xmpp-sasl/callbackhandler-EXTERNAL=org.kontalk.xmppserver.auth.KontalkCertificateCallbackHandler
 sess-man/plugins-conf/presence-state/extended-presence-processors=org.kontalk.xmppserver.presence.PublicKeyPresence
 c2s/processors[s]=urn:xmpp:sm:3=org.kontalk.xmppserver.KontalkIOProcessor
+c2s/processors/urn\:xmpp\:sm\:3/ack-timeout[I]=60
 message-router/components/msg-receivers/amp.active[B]=false
 --vhost-anonymous-enabled=false
 --vhost-tls-required=false

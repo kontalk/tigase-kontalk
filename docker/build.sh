@@ -3,6 +3,7 @@ set -e
 
 DATADIR=data
 SSL_TRUSTED=trusted.pem
+TIGASE_CONF=init.properties.in
 
 . tigase.properties
 
@@ -23,6 +24,14 @@ then
     # copy default trusted certs bundle
     echo "Using default trusted certs bundle"
     cp ${DATADIR}/${SSL_TRUSTED}.dist ${DATADIR}/${SSL_TRUSTED}
+fi
+
+# check init.properties
+if [ ! -f ${DATADIR}/${TIGASE_CONF} ];
+then
+    # copy default trusted certs bundle
+    echo "Using default Tigase configuration"
+    cp ${DATADIR}/${TIGASE_CONF}.dist ${DATADIR}/${TIGASE_CONF}
 fi
 
 # TODO check server-[public|private].key
