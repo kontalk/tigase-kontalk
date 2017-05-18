@@ -51,7 +51,7 @@ then
     cp ../tigase-kontalk/jars/*.jar jars/ &&
     java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
         -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
-        -logLevel ALL -useSSL false
+        -logLevel ALL -useSSL false -adminJID admin@${XMPP_SERVICE} -adminJIDpass dummy
     java -cp "jars/*" tigase.util.DBSchemaLoader -dbHostname db -dbType mysql -schemaVersion 7-1 \
         -dbName ${MYSQL_DATABASE} -dbUser ${MYSQL_USER} -dbPass ${MYSQL_PASSWORD} \
         -logLevel ALL -useSSL false \
