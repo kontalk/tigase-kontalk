@@ -15,9 +15,12 @@ fi
 # create GPG key if needed
 if [ ! -f ${HOME}/.gpgsetup ];
 then
-    echo "Generating GPG key pair"
-    KEY_USERID="kontalk-${RANDOM}@${XMPP_SERVICE}"
-    gpg2 --batch --gen-key <<EOF
+
+    if [ ! -f /tmp/server-private.key ] || [ ! -f /tmp/server-public.key ];
+    then
+        echo "Generating GPG key pair"
+        KEY_USERID="kontalk-${RANDOM}@${XMPP_SERVICE}"
+        gpg2 --batch --gen-key <<EOF
 %no-protection
 Key-Type: 1
 Key-Length: 2048
@@ -28,11 +31,19 @@ Name-Email: ${KEY_USERID}
 Expire-Date: 0
 EOF
 
-    # get GPG key fingerprint
-    export FINGERPRINT=$(gpg2 --with-colons --with-fingerprint --list-secret-keys ${KEY_USERID} | grep fpr | head -n 1 | awk '{print $10}' FS=:)
-    if [ "${FINGERPRINT}" == "" ]; then
-        echo "GPG key not found!"
-        exit 1
+        # get GPG key fingerprint
+        export FINGERPRINT=$(gpg2 --with-colons --with-fingerprint --list-secret-keys ${KEY_USERID} | grep fpr | head -n 1 | awk '{print $10}' FS=:)
+        if [ "${FINGERPRINT}" == "" ]; then
+            echo "GPG key not found!"
+            exit 1
+        fi
+    else
+        echo "Using existing GPG key pair"
+        export FINGERPRINT=$(gpg2 --with-colons --import --import-options=import-show /tmp/server-private.key /tmp/server-public.key | grep fpr | head -n 1 | awk '{print $10}' FS=:)
+        if [ "${FINGERPRINT}" == "" ]; then
+            echo "Could not import existing GPG key!"
+            exit 1
+        fi
     fi
 
     touch ${HOME}/.gpgsetup

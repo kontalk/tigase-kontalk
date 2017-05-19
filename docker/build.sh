@@ -14,7 +14,7 @@ if [ "${XMPP_SERVICE}" == "" ]; then
 fi
 
 # check fingerprint
-if [ "${FINGERPRINT}" == "" ]; then
+if [ ! -f ${DATADIR}/server-private.key ] || [ ! -f ${DATADIR}/server-public.key ]; then
     echo "Not using existing GPG server key, I'll generate one automatically."
 fi
 
