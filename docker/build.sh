@@ -13,9 +13,14 @@ if [ "${XMPP_SERVICE}" == "" ]; then
     exit 1
 fi
 
-# check fingerprint
+# check GPG key
 if [ ! -f ${DATADIR}/server-private.key ] || [ ! -f ${DATADIR}/server-public.key ]; then
-    echo "Not using existing GPG server key, I'll generate one automatically."
+    echo "Not using provided GPG server key, I'll generate one automatically."
+fi
+
+# check GPG key
+if [ ! -f ${DATADIR}/privatekey.pem ] || [ ! -f ${DATADIR}/certificate.pem ]; then
+    echo "Not using provided X.509 certificate, I'll generate one automatically."
 fi
 
 # check trusted.pem
@@ -33,8 +38,6 @@ then
     echo "Using default Tigase configuration"
     cp ${DATADIR}/${TIGASE_CONF}.dist ${DATADIR}/${TIGASE_CONF}
 fi
-
-# TODO check server-[public|private].key
 
 docker-compose rm -f
 docker-compose up

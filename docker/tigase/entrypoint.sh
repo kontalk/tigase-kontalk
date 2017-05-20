@@ -5,11 +5,24 @@ set -e
 SSL_CERT="${HOME}/kontalk/tigase-kontalk/certs/${XMPP_SERVICE}.pem"
 if [ ! -f ${SSL_CERT} ];
 then
-    echo "Generating SSL certificate"
-    openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=${XMPP_SERVICE}" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
-    mkdir -p $(dirname ${SSL_CERT})
-    cat cert.pem key.pem >${SSL_CERT} &&
-    rm cert.pem key.pem
+    if [ ! -f /tmp/privatekey.pem ] || [ ! -f /tmp/certificate.pem ];
+    then
+        if [ "${CERT_LETSENCRYPT}" == "true" ]; then
+            echo "Generating Let's Encrypt certificates"
+            # TODO
+            echo "Not supported yet."
+            exit 1
+        else
+            echo "Generating SSL certificate"
+            openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=${XMPP_SERVICE}" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
+            mkdir -p $(dirname ${SSL_CERT})
+            cat cert.pem key.pem >${SSL_CERT} &&
+            rm cert.pem key.pem
+        fi
+    else
+        echo "Using provided SSL certificate"
+        cat /tmp/certificate.pem /tmp/privatekey.pem /tmp/cachain.pem >${SSL_CERT} 2>/dev/null
+    fi
 fi
 
 # create GPG key if needed
@@ -38,7 +51,7 @@ EOF
             exit 1
         fi
     else
-        echo "Using existing GPG key pair"
+        echo "Using provided GPG key pair"
         export FINGERPRINT=$(gpg2 --with-colons --import --import-options=import-show /tmp/server-private.key /tmp/server-public.key | grep fpr | head -n 1 | awk '{print $10}' FS=:)
         if [ "${FINGERPRINT}" == "" ]; then
             echo "Could not import existing GPG key!"
@@ -90,9 +103,9 @@ fi
 gpg2 --export ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-public.key
 gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-private.key
 
+cd ${HOME}/kontalk/tigase-kontalk
 dockerize \
- -template /tmp/init.properties.in:${HOME}/kontalk/tigase-kontalk/etc/init.properties \
- -stdout ${HOME}/kontalk/tigase-kontalk/logs/tigase-console.log \
- -stderr ${HOME}/kontalk/tigase-kontalk/logs/tigase.log.0 \
+ -template /tmp/init.properties.in:etc/init.properties \
+ -stderr logs/tigase.log.0 \
  -wait tcp://db:3306 \
- ${HOME}/kontalk/tigase-kontalk/scripts/tigase.sh run ${HOME}/kontalk/tigase-kontalk/etc/tigase.conf
+ scripts/tigase.sh run etc/tigase.conf
