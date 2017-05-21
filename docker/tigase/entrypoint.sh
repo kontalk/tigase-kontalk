@@ -8,9 +8,7 @@ then
     if [ ! -f /tmp/privatekey.pem ] || [ ! -f /tmp/certificate.pem ];
     then
         if [ "${CERT_LETSENCRYPT}" == "true" ]; then
-            echo "Generating Let's Encrypt certificates"
-            # TODO
-            echo "Not supported yet."
+            echo "Let's Encrypt certificates are not supported yet."
             exit 1
         else
             echo "Generating SSL certificate"
