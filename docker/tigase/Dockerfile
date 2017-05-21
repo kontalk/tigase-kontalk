@@ -1,3 +1,4 @@
+# use BRANCH variable to provide source code branch
 FROM debian:jessie-backports
 LABEL "org.kontalk"="Kontalk devteam"
 LABEL version="1.0"
@@ -10,7 +11,7 @@ COPY apt_preferences /etc/apt/preferences
 # install packages
 RUN apt-get -qq update
 RUN apt-get -qq -y install wget git maven mysql-client openssl
-RUN apt-get -qq -y install -t jessie-backports openjdk-8-jdk
+RUN apt-get -qq -y install -t jessie-backports openjdk-8-jdk certbot
 RUN apt-get -qq -y install -t testing gnupg2
 RUN update-java-alternatives -s java-1.8.0-openjdk-amd64
 
@@ -31,7 +32,9 @@ USER kontalk
 WORKDIR /home/kontalk
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash
+ARG BRANCH
+ENV BRANCH ${BRANCH:-master}
+RUN wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash -s - kontalk ${BRANCH}
 
 # copy the entrypoint script
 # we don't do this before to take advantage of caching

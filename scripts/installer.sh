@@ -1,6 +1,7 @@
 #!/bin/bash
 # Helper installation scripts for rapid download and building of the Kontalk server
-# it will install everything in the directory provided as a parameter (default: $PWD/kontalk-server)
+# It will install everything in the directory provided as a parameter (default: $PWD/kontalk-server)
+# A second parameter can be used to use a specific branch
 # To be used as a standalone script like this:
 # wget -qq -O - url_to_installer.sh | bash
 
@@ -21,6 +22,7 @@ check_programs()
 check_programs
 
 WORKDIR="$1"
+BRANCH="$2"
 
 if [ "$WORKDIR" == "" ]; then
     WORKDIR="$PWD/kontalk"
@@ -35,9 +37,13 @@ cd "$WORKDIR"
 
 yell "Cloning repositories"
 
+if [ "$BRANCH" == "" ]; then
+    BRANCH="master"
+fi
+
 try git clone https://github.com/kontalk/tigase-kontalk.git
-try git clone https://github.com/kontalk/tigase-extension.git
-try git clone https://github.com/kontalk/tigase-server.git
+try git clone -b ${BRANCH} https://github.com/kontalk/tigase-extension.git
+try git clone -b ${BRANCH} https://github.com/kontalk/tigase-server.git
 
 cd tigase-kontalk
 mvn install
