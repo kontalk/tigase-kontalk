@@ -1,3 +1,4 @@
 *.key
 *.pem
 *.properties.in
+*.yml.in

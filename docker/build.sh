@@ -4,6 +4,7 @@ set -e
 DATADIR=data
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
+HTTUPLOAD_CONF=config.yml.in
 
 . tigase.properties
 
@@ -34,10 +35,16 @@ fi
 # check init.properties
 if [ ! -f ${DATADIR}/${TIGASE_CONF} ];
 then
-    # copy default trusted certs bundle
     echo "Using default Tigase configuration"
     cp ${DATADIR}/${TIGASE_CONF}.dist ${DATADIR}/${TIGASE_CONF}
 fi
 
+# check config.yml (httpupload)
+if [ ! -f ${DATADIR}/${TIGASE_CONF} ];
+then
+    echo "Using default HTTP upload component configuration"
+    cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${DATADIR}/${HTTUPLOAD_CONF}
+fi
+
 docker-compose rm -f
-docker-compose up
+docker-compose build

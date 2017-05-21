@@ -5,7 +5,7 @@ set -e
 SSL_CERT="${HOME}/kontalk/tigase-kontalk/certs/${XMPP_SERVICE}.pem"
 if [ ! -f ${SSL_CERT} ];
 then
-    if [ ! -f /tmp/privatekey.pem ] || [ ! -f /tmp/certificate.pem ];
+    if [ ! -f /tmp/data/privatekey.pem ] || [ ! -f /tmp/data/certificate.pem ];
     then
         if [ "${CERT_LETSENCRYPT}" == "true" ]; then
             echo "Let's Encrypt certificates are not supported yet."
@@ -19,7 +19,7 @@ then
         fi
     else
         echo "Using provided SSL certificate"
-        cat /tmp/certificate.pem /tmp/privatekey.pem /tmp/cachain.pem >${SSL_CERT} 2>/dev/null
+        cat /tmp/data/certificate.pem /tmp/data/privatekey.pem /tmp/data/cachain.pem >${SSL_CERT} 2>/dev/null
     fi
 fi
 
@@ -27,7 +27,7 @@ fi
 if [ ! -f ${HOME}/.gpgsetup ];
 then
 
-    if [ ! -f /tmp/server-private.key ] || [ ! -f /tmp/server-public.key ];
+    if [ ! -f /tmp/data/server-private.key ] || [ ! -f /tmp/data/server-public.key ];
     then
         echo "Generating GPG key pair"
         KEY_USERID="kontalk-${RANDOM}@${XMPP_SERVICE}"
@@ -50,7 +50,7 @@ EOF
         fi
     else
         echo "Using provided GPG key pair"
-        export FINGERPRINT=$(gpg2 --with-colons --import --import-options=import-show /tmp/server-private.key /tmp/server-public.key | grep fpr | head -n 1 | awk '{print $10}' FS=:)
+        export FINGERPRINT=$(gpg2 --with-colons --import --import-options=import-show /tmp/data/server-private.key /tmp/data/server-public.key | grep fpr | head -n 1 | awk '{print $10}' FS=:)
         if [ "${FINGERPRINT}" == "" ]; then
             echo "Could not import existing GPG key!"
             exit 1
@@ -103,7 +103,7 @@ gpg2 --export-secret-key ${FINGERPRINT} >${HOME}/kontalk/tigase-kontalk/server-p
 
 cd ${HOME}/kontalk/tigase-kontalk
 dockerize \
- -template /tmp/init.properties.in:etc/init.properties \
+ -template /tmp/data/init.properties.in:etc/init.properties \
  -stderr logs/tigase.log.0 \
  -wait tcp://db:3306 \
  scripts/tigase.sh run etc/tigase.conf
