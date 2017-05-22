@@ -20,7 +20,9 @@ services:
       - "5222:5222"
       - "5269:5269"
     volumes:
+      - tigase_data:/home/kontalk/data
       - ./data:/tmp/data
+      - ./data/tigase.conf:/home/kontalk/kontalk/tigase-kontalk/etc/tigase.conf
       - ./data/trusted.pem:/home/kontalk/kontalk/tigase-kontalk/trusted.pem
     restart: always
     env_file: tigase.properties
@@ -33,9 +35,12 @@ services:
     ports:
       - "8828:8828"
     volumes:
+      - httpupload_data:/home/kontalk/disk
       - ./data/config.yml.in:/tmp/config.yml.in
     restart: always
     env_file: tigase.properties
 
 volumes:
-    db_data:
+  db_data:
+  tigase_data:
+  httpupload_data:

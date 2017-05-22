@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+echo "Building images"
+$(dirname $0)/tigase/build.sh >/dev/null
+$(dirname $0)/httpupload/build.sh >/dev/null
+
 DATADIR=data
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
