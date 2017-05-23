@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Building images"
-$(dirname $0)/tigase/build.sh >/dev/null
-$(dirname $0)/httpupload/build.sh >/dev/null
+MODE=$1
+
+if [ "${MODE}" != "dev" ] && [ "${MODE}" != "prod" ]; then
+    echo "Usage: $0 [dev|prod]"
+    exit 1
+fi
 
 DATADIR=data
 SSL_TRUSTED=trusted.pem
@@ -20,12 +23,25 @@ fi
 
 # check GPG key
 if [ ! -f ${DATADIR}/server-private.key ] || [ ! -f ${DATADIR}/server-public.key ]; then
-    echo "Not using provided GPG server key, I'll generate one automatically."
+    if [ "$MODE" == "dev" ]; then
+        echo "Not using provided GPG server key, I'll generate one automatically."
+    else
+        echo "You must provide an existing GPG key for the server."
+        echo "Please export it into ${DATADIR}/server-private.key and ${DATADIR}/server-public.key"
+        exit 1
+    fi
 fi
 
 # check GPG key
 if [ ! -f ${DATADIR}/privatekey.pem ] || [ ! -f ${DATADIR}/certificate.pem ]; then
-    echo "Not using provided X.509 certificate, I'll generate one automatically."
+    if [ "$MODE" == "dev" ]; then
+        echo "Not using provided X.509 certificate, I'll generate one automatically."
+    else
+        echo "You must provide an existing X.509 certificate for the server."
+        echo "Please copy it into ${DATADIR}/privatekey.pem and ${DATADIR}/certificate.pem"
+        echo "An optional CA chain can be provided into ${DATADIR}/cachain.pem"
+        exit 1
+    fi
 fi
 
 # check trusted.pem
@@ -50,5 +66,10 @@ then
     cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${DATADIR}/${HTTUPLOAD_CONF}
 fi
 
+echo "Building images"
+$(dirname $0)/tigase/build.sh >/dev/null
+$(dirname $0)/httpupload/build.sh >/dev/null
+
+echo "Resetting containers"
 docker-compose rm -f
 docker-compose build
