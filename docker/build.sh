@@ -1,19 +1,49 @@
 #!/usr/bin/env bash
 set -e
 
-MODE=$1
-
-if [ "${MODE}" != "dev" ] && [ "${MODE}" != "prod" ]; then
-    echo "Usage: $0 [dev|prod]"
-    exit 1
-fi
-
 DATADIR=data
 SSL_TRUSTED=trusted.pem
 TIGASE_CONF=init.properties.in
 HTTUPLOAD_CONF=config.yml.in
 
 . tigase.properties
+
+function create_gpgkey()
+{
+    export GNUPGHOME=$(mktemp -d)
+    KEY_USERID="kontalk-${RANDOM}@${XMPP_SERVICE}"
+    gpg2 --batch --gen-key <<EOF
+%no-protection
+Key-Type: 1
+Key-Length: 2048
+Subkey-Type: 1
+Subkey-Length: 2048
+Name-Real: Kontalk server
+Name-Email: ${KEY_USERID}
+Expire-Date: 0
+EOF
+
+    # get GPG key fingerprint
+    FINGERPRINT=$(gpg2 --with-colons --with-fingerprint --list-secret-keys ${KEY_USERID} | grep fpr | head -n 1 | awk '{print $10}' FS=:)
+    if [ "${FINGERPRINT}" == "" ]; then
+        echo "GPG key not found!"
+        return 1
+    fi
+
+    # export the newly created keys
+    gpg2 --export ${FINGERPRINT} >${DATADIR}/server-public.key
+    gpg2 --export-secret-key ${FINGERPRINT} >${DATADIR}/server-private.key
+
+    echo ${FINGERPRINT}
+    return 0
+}
+
+MODE=$1
+
+if [ "${MODE}" != "dev" ] && [ "${MODE}" != "prod" ]; then
+    echo "Usage: $0 [dev|prod]"
+    exit 1
+fi
 
 # check XMPP service name
 if [ "${XMPP_SERVICE}" == "" ]; then
@@ -26,9 +56,13 @@ if [ ! -f ${DATADIR}/server-private.key ] || [ ! -f ${DATADIR}/server-public.key
     if [ "$MODE" == "dev" ]; then
         echo "Not using provided GPG server key, I'll generate one automatically."
     else
-        echo "You must provide an existing GPG key for the server."
-        echo "Please export it into ${DATADIR}/server-private.key and ${DATADIR}/server-public.key"
-        exit 1
+        echo "Generating new GPG server key."
+        if ! FINGERPRINT=$(create_gpgkey); then
+            echo "We could not create a new GPG key for your server."
+            echo "Please create or provide one and export it into ${DATADIR}/server-private.key and ${DATADIR}/server-public.key"
+            exit 1
+        fi
+        export FINGERPRINT
     fi
 fi
 
