@@ -12,14 +12,23 @@ To build this image just run this from a terminal:
 ./build.sh
 ```
 
+You can optionally pass the git branch to use as an argument to the script:
+
+* master (default)
+* staging (mostly stable, used in main Kontalk server)
+* production (stable)
+
 When executed in a container, it will generate server keys automatically for testing purposes.
 However, for production environments, it's highly recommended to keep keys exported somewhere else.
 
 The following environment variables are mandatory:
 
 * `XMPP_SERVICE`: XMPP service name (not necessarily the container hostname)
-* `MYSQL_PASSWORD`: password of the MySQL user account
+* `MYSQL_PASSWORD`: password of the MySQL kontalk account
+* `MYSQL_ROOT_PASSWORD`: password for the MySQL root account
+* `MYSQL_TIMEZONE`: MySQL timezone
+* `HTTPUPLOAD_MAX_SIZE`: max upload file size in bytes
 
 The following variables will be used if available:
 
-* `FINGERPRINT`: fingerprint of the GPG server key (if available)
+* `CERT_LETSENCRYPT`: use Let's Encrypt service for generating server certificates (**not implemented yet**)
