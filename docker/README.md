@@ -22,7 +22,7 @@ inside. More details about the meaning of the configuration can be found in
 the [image README file](tigase/README.md).
 
 At this point, if you want to just run a development server for tests, just
-go straight below to [the actual build](#Build the containers)
+go straight below to [the actual build](#build-the-containers)
 
 ## Setup for a production enviroment
 
