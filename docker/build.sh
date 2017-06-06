@@ -94,7 +94,7 @@ then
 fi
 
 # check config.yml (httpupload)
-if [ ! -f ${DATADIR}/${TIGASE_CONF} ];
+if [ ! -f ${DATADIR}/${HTTUPLOAD_CONF} ];
 then
     echo "Using default HTTP upload component configuration"
     cp ${DATADIR}/${HTTUPLOAD_CONF}.dist ${DATADIR}/${HTTUPLOAD_CONF}
