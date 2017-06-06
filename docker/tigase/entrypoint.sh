@@ -5,6 +5,7 @@ set -e
 SSL_CERT="${HOME}/kontalk/tigase-kontalk/certs/${XMPP_SERVICE}.pem"
 if [ ! -f ${SSL_CERT} ];
 then
+    mkdir -p $(dirname ${SSL_CERT})
     if [ ! -f /tmp/data/privatekey.pem ] || [ ! -f /tmp/data/certificate.pem ];
     then
         if [ "${CERT_LETSENCRYPT}" == "true" ]; then
@@ -13,7 +14,6 @@ then
         else
             echo "Generating SSL certificate"
             openssl req -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=${XMPP_SERVICE}" -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
-            mkdir -p $(dirname ${SSL_CERT})
             cat cert.pem key.pem >${SSL_CERT} &&
             rm cert.pem key.pem
         fi
