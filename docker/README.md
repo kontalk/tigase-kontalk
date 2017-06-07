@@ -31,7 +31,7 @@ possibly a GPG key for the server. The latter will be created on demand on
 first run if not found. For the scripts to use them, certificate and keys must
 be located in:
 
-* `data/server-private.key`: GPG server private key
+* `data/server-private.key`: GPG server private key (**must not be password-protected!**)
 * `data/server-public.key`: GPG server public key
 * `data/privatekey.pem`: SSL private key
 * `data/certificate.pem`: SSL certificate
