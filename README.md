@@ -1,6 +1,16 @@
 Kontalk Tigase server
 =====================
 
+### Moving to Docker
+
+We are currently in the process of moving our infrastructure and server environment to use Docker.
+This repository is still needed to run the server, but it's low level stuff. You should begin using
+[the Docker environment](//github.com/kontalk/xmppserver-docker) right now, providing feedback
+and asking for help if you need it. We will soon drop support for this method of installation and
+support only Docker based installation.
+
+### Build & install
+
 This repository contains build and startup scripts for setting up and running
 a Kontalk server.
 

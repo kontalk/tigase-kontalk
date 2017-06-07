@@ -1,3 +1,5 @@
+> We are moving to Docker. Please refer to documents in [our new Docker repository](//github.com/kontalk/xmppserver-docker).
+
 **WARNING** this tutorial is NOT for newbies. Linux system administrator skills are required. Also, it takes for granted concepts like GPG keys and SSL certificates, which are assumed to be known by the reader.
 
 ## Introduction ##
