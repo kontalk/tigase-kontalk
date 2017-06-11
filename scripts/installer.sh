@@ -23,6 +23,7 @@ check_programs
 
 WORKDIR="$1"
 BRANCH="$2"
+SERVERBRANCH="$3"
 
 if [ "$WORKDIR" == "" ]; then
     WORKDIR="$PWD/kontalk"
@@ -40,10 +41,13 @@ yell "Cloning repositories"
 if [ "$BRANCH" == "" ]; then
     BRANCH="master"
 fi
+if [ "$SERVERBRANCH" == "" ]; then
+    SERVERBRANCH="master"
+fi
 
 try git clone https://github.com/kontalk/tigase-kontalk.git
-try git clone -b ${BRANCH} https://github.com/kontalk/tigase-extension.git
-try git clone -b ${BRANCH} https://github.com/kontalk/tigase-server.git
+try git clone -n https://github.com/kontalk/tigase-extension.git && (cd tigase-extension && git checkout ${BRANCH})
+try git clone -n https://github.com/kontalk/tigase-server.git && (cd tigase-server && git checkout ${SERVERBRANCH})
 
 cd tigase-kontalk
 mvn install
