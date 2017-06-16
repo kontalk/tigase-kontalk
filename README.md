@@ -6,7 +6,7 @@ Kontalk Tigase server
 A Kontalk server can be quickly installed and set up in a few minutes if you use
 [our Docker environment](//github.com/kontalk/xmppserver-docker).
 
-You can get [support in our forum](https://forum.kontalk.org/) only if you use our Docker environment.
+**You can get [support in our forum](https://forum.kontalk.org/) only if you use our Docker environment.**
 We don't support other means of installations because setting up a Kontalk server is complicated and
 we put severe efforts to make it easier. You can however provide feedback on our Docker installation
 by opening a topic in the forum or by [opening an issue](//github.com/kontalk/xmppserver-docker/issues/new).
