@@ -84,6 +84,7 @@ telephony providers. We currently support:
 * Nexmo (SMS and verify APIs)
 * Cognalys
 * Checkmobi (CLI and missed-call)
+* JMP.Chat
 * Android emulator (used in local tests)
 
 ### Roster match
