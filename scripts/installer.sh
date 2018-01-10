@@ -23,10 +23,9 @@ check_programs
 
 WORKDIR="$1"
 BRANCH="$2"
-SERVERBRANCH="$3"
 
 if [ "$WORKDIR" == "" ]; then
-    WORKDIR="$PWD/kontalk"
+    WORKDIR="$PWD/kontalk-server"
 fi
 
 if [ -a "$WORKDIR" ]; then
@@ -36,18 +35,13 @@ fi
 try mkdir -p "$WORKDIR"
 cd "$WORKDIR"
 
-yell "Cloning repositories"
+yell "Downloading sources"
 
 if [ "$BRANCH" == "" ]; then
     BRANCH="master"
 fi
-if [ "$SERVERBRANCH" == "" ]; then
-    SERVERBRANCH="master"
-fi
 
-try git clone https://github.com/kontalk/tigase-kontalk.git
-try git clone -n https://github.com/kontalk/tigase-extension.git && (cd tigase-extension && git checkout ${BRANCH})
-try git clone -n https://github.com/kontalk/tigase-server.git && (cd tigase-server && git checkout ${SERVERBRANCH})
+try git clone -b ${BRANCH} --recursive https://github.com/kontalk/tigase-kontalk.git ${WORKDIR}
 
-cd tigase-kontalk
+cd kontalk-server
 mvn install

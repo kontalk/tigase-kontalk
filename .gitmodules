@@ -1,0 +1,6 @@
+[submodule "tigase-server"]
+	path = tigase-server
+	url = https://github.com/kontalk/tigase-server.git
+[submodule "tigase-extension"]
+	path = tigase-extension
+	url = https://github.com/kontalk/tigase-extension.git

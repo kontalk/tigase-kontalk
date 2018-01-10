@@ -9,8 +9,8 @@
   <packaging>pom</packaging>
 
   <modules>
-      <module>../tigase-server/modules/master</module>
-      <module>../tigase-extension</module>
+      <module>tigase-server/modules/master</module>
+      <module>tigase-extension</module>
   </modules>
 
   <build>
@@ -45,7 +45,7 @@
                         <outputDirectory>jars</outputDirectory>
                         <resources>
                             <resource>
-                                <directory>../tigase-extension/target/lib</directory>
+                                <directory>tigase-extension/target/lib</directory>
                                 <excludes>
                                     <exclude>junit-*</exclude>
                                     <exclude>hamcrest-core-*</exclude>
@@ -53,7 +53,7 @@
                                 </excludes>
                             </resource>
                             <resource>
-                                <directory>../tigase-server/target/lib</directory>
+                                <directory>tigase-server/target/lib</directory>
                                 <excludes>
                                     <exclude>junit-*</exclude>
                                     <exclude>hamcrest-core-*</exclude>
@@ -61,7 +61,7 @@
                                 </excludes>
                             </resource>
                             <resource>
-                                <directory>../tigase-extension/target</directory>
+                                <directory>tigase-extension/target</directory>
                                 <includes>
                                     <include>tigase-extension-*.jar</include>
                                 </includes>
@@ -79,7 +79,7 @@
                         <outputDirectory>scripts/admin/sess-man</outputDirectory>
                         <resources>
                             <resource>
-                                <directory>../tigase-extension/src/main/groovy/tigase/admin</directory>
+                                <directory>tigase-extension/src/main/groovy/tigase/admin</directory>
                             </resource>
                         </resources>
                     </configuration>
