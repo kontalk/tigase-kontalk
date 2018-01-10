@@ -41,7 +41,7 @@ if [ "$BRANCH" == "" ]; then
     BRANCH="master"
 fi
 
-try git clone -b ${BRANCH} --recursive https://github.com/kontalk/tigase-kontalk.git ${WORKDIR}
+try git clone -n https://github.com/kontalk/tigase-kontalk.git ${WORKDIR} && (cd ${WORKDIR} && git checkout ${BRANCH} && git submodule update --init)
 
 cd kontalk-server
 mvn install
