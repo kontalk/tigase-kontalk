@@ -22,15 +22,7 @@ To build the Kontalk server, run this command in your terminal:
 wget -qq -O - https://raw.githubusercontent.com/kontalk/tigase-kontalk/master/scripts/installer.sh | bash
 ```
 
-The script will clone this repository in a new folder called "kontalk/tigase-kontalk":
-
-And will run this command from inside `tigase-kontalk`:
-
-```
-mvn install
-```
-
-The same steps can also be done manually of course.
+The script will clone this repository in a new folder called "kontalk-server" and build everything.
 
 After building, configure the server through `etc/tigase.conf` and `etc/init.properties` and after that
 you should get it up and running:

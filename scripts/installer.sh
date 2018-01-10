@@ -32,8 +32,7 @@ if [ -a "$WORKDIR" ]; then
     die "Working directory $WORKDIR already exists."
 fi
 
-try mkdir -p "$WORKDIR"
-cd "$WORKDIR"
+cd $(dirname "$WORKDIR")
 
 yell "Downloading sources"
 
