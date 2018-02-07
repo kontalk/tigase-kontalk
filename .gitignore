@@ -7,3 +7,4 @@
 .vagrant
 *.kch
 /scripts/admin
+/.idea
