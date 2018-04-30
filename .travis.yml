@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+language: java
+jdk:
+  - oraclejdk8
+
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq libkyotocabinet16 libkyotocabinet-dev
+ - wget http://fallabs.com/kyotocabinet/javapkg/kyotocabinet-java-1.24.tar.gz
+ - tar -xzf kyotocabinet-java-1.24.tar.gz
+ - cd kyotocabinet-java-1.24 && ./configure --prefix=/usr && make && sudo make install && cd ..
+
+install:
+ - mkdir -p jars && ln -s /usr/lib/libjkyotocabinet.so jars/libjkyotocabinet.so
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - git clone https://github.com/kontalk/xmppserver-docker.git xmppserver-docker
+      - docker build --build-arg BRANCH=${TRAVIS_COMMIT} -t kontalk/xmppserver:$(echo ${TRAVIS_COMMIT} | colrm 8) xmppserver-docker/tigase
+      - docker images
+      - docker push kontalk/xmppserver:$(echo ${TRAVIS_COMMIT} | colrm 8)
