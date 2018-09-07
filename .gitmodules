@@ -4,3 +4,6 @@
 [submodule "tigase-extension"]
 	path = tigase-extension
 	url = https://github.com/kontalk/tigase-extension.git
+[submodule "tigase-pubsub"]
+	path = tigase-pubsub
+	url = https://github.com/kontalk/tigase-pubsub.git
